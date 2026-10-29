@@ -10,9 +10,9 @@ Press **⌃⌘V** (Control + Command + V) to open your history, type to search, 
 
 ## Download and install
 
-1. Download **Pastlog-1.0.0.zip** from the [latest release](https://github.com/sviera91/pastlog/releases/latest).
+1. Open the [latest release](https://github.com/sviera91/pastlog/releases/latest) and download the Pastlog `.zip` file.
 2. Double-click the zip file, then drag **Pastlog** into your **Applications** folder.
-3. Open Pastlog. macOS will warn you that it can't verify the app, because Pastlog is free and not registered with Apple. Click **Done**.
+3. Open Pastlog. macOS can't verify the app because this release isn't notarized by Apple. Click **Done**.
 4. Open **System Settings → Privacy & Security**, scroll down, and click **Open Anyway** next to Pastlog. You only have to do this once.
 
 Pastlog needs a Mac with Apple silicon (M1 or newer) running macOS 14 or later.
@@ -30,7 +30,7 @@ If you skip this step, Pastlog still copies the clip, and you press **⌘V** to 
 - Search everything you've copied: text, links, images, and files.
 - Pin clips you use often so they're always there.
 - Paste with or without formatting. Hold **Shift** when you press **Return** to paste plain text.
-- Press **⌘1** through **⌘9** to paste one of your most recent clips.
+- Press **⌘1** through **⌘9**, or **⌘0**, to paste one of your 10 most recent clips.
 - Choose from 11 color themes.
 - Keep passwords and apps you choose out of your history.
 
