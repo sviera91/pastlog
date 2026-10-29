@@ -1,80 +1,53 @@
-# Pastlog
+<p align="center"><img src="docs/banner.png" alt="Pastlog: everything you copy, searchable" width="100%"></p>
 
-A menu-bar clipboard manager for macOS. It records everything you copy, makes it searchable, and includes a **City Pop · sviera91** theme based on [sviera91.github.io](https://sviera91.github.io).
+<p align="center"><a href="https://github.com/sviera91/pastlog/releases/latest"><b>Download Pastlog for Mac</b></a></p>
 
-Pastlog installs as its own app at `/Applications/Pastlog.app` (`io.github.sviera91.pastlog`).
+Pastlog remembers everything you copy on your Mac, so you can find it and paste it again later.
 
-## Features
+Press **⌃⌘V** (Control + Command + V) to open your history, type to search, and press **Return** to paste.
 
-| Feature | Pastlog |
-|---|---|
-| Large history (up to 9,999) | 50 – 9,999 clips. Pinned clips are never trimmed. |
-| Text, links, images, files | Records every pasteboard flavor: rich text, images, files, colors, links, and more. |
-| Instant search | Multi-word search across content, app, and type, plus filters (All / Pinned / Text / Links / Images / Files). |
-| Paste formatted or plain | `↩` pastes formatted, `⇧↩` pastes plain text. You can also make plain the default. |
-| Quick paste | `⌘1`–`⌘9`, `⌘0` |
-| Pinning | `⇧⌘P` |
-| Clip info | Shows source app, type, copied time, paste count, and size. |
-| Edit / delete / clear | `⌘E` edits text. `⌘⌫` deletes. Clear History keeps pinned clips. |
-| App exclusions | Privacy → Excluded apps |
-| Skip sensitive data | Ignores password managers' concealed or transient clips (toggle). |
-| Themes | 11 themes plus Match System, including City Pop · sviera91. |
-| Menu bar or Dock | Menu-bar icon (right-click for the menu). The Dock icon is optional. |
-| Quick menu at cursor | Separate shortcut. |
-| Duplicates | A re-copied clip moves to the top instead of being duplicated. |
+<p align="center"><img src="docs/screenshot.png" alt="Pastlog in light and dark mode" width="100%"></p>
 
-## Shortcuts
+## Download and install
 
-| Action | Default |
-|---|---|
-| Open Pastlog | `⌃⌘V` |
-| Quick menu at cursor | `⌃⌥V` |
-| Navigate / paste / plain | `↑↓`, `↩`, `⇧↩` |
-| Cycle filter | `⇥` |
-| Open link/file · Preferences · Close | `⌘O`, `⌘,`, `esc` |
+1. Open the [latest release](https://github.com/sviera91/pastlog/releases/latest) and download the Pastlog `.zip` file.
+2. Double-click the zip file, then drag **Pastlog** into your **Applications** folder.
+3. Open Pastlog. macOS can't verify the app because this release isn't notarized by Apple. Click **Done**.
+4. Open **System Settings → Privacy & Security**, scroll down, and click **Open Anyway** next to Pastlog. You only have to do this once.
 
-You can change shortcuts in Preferences → Shortcuts.
+Pastlog needs a Mac with Apple silicon (M1 or newer) running macOS 14 or later.
 
-## Install
+## Let Pastlog paste for you
 
-1. Download `Pastlog-<version>.zip` from [Releases](https://github.com/sviera91/pastlog/releases), unzip it, and move `Pastlog.app` to `/Applications`.
-2. The release is **not notarized by Apple**, so the first launch is blocked. Right-click `Pastlog.app` → **Open** → **Open**. If macOS says the app is damaged, run:
-   ```bash
-   xattr -dr com.apple.quarantine /Applications/Pastlog.app
-   ```
-3. Grant Accessibility access when asked (see below).
+Pastlog can paste a clip straight into the app you're using. To turn this on, go to **System Settings → Privacy & Security → Accessibility** and switch on **Pastlog**.
 
-## Auto-paste permission
+If you skip this step, Pastlog still copies the clip, and you press **⌘V** to paste it.
 
-To paste straight into the frontmost app, Pastlog needs **System Settings → Privacy & Security → Accessibility → Pastlog**. Without this permission, Pastlog copies the clip and you press `⌘V` yourself.
+**Pastlog keeps asking for access even though it's switched on?** In that same list, select Pastlog, click **−** to remove it, then click **+** to add it back. Quit and reopen Pastlog.
 
-**Keeps asking even though it's switched on?** macOS ties the grant to the app's code signature. After an update or rebuild, the old entry can show as ON but no longer apply. Open Privacy & Security → Accessibility, select Pastlog, click **−**, add it again with **+**, then relaunch Pastlog.
+## What you can do
 
-When you build Pastlog yourself, `build.sh` signs it with a code-signing identity named `Pastlog Local Signing` if your keychain has one, or with `PASTLOG_SIGN_IDENTITY`. A stable identity keeps the grant across rebuilds. Without one, `build.sh` falls back to ad-hoc signing.
+- Search everything you've copied: text, links, images, and files.
+- Pin clips you use often so they're always there.
+- Paste with or without formatting. Hold **Shift** when you press **Return** to paste plain text.
+- Press **⌘1** through **⌘9**, or **⌘0**, to paste one of your 10 most recent clips.
+- Choose from 11 color themes.
+- Keep passwords and apps you choose out of your history.
 
-## Build & install
+<p align="center"><img src="docs/themes.png" alt="Pastlog's 11 color themes" width="100%"></p>
 
-You only need the Command Line Tools (Xcode isn't required).
+Find all options by clicking the Pastlog icon in the menu bar and choosing **Preferences**.
 
-```bash
-./scripts/build.sh               # build dist/Pastlog.app
-./scripts/build.sh --install     # also install to /Applications and launch
-./scripts/build.sh --snapshots   # render every theme to dist/snapshots/
-swift run --scratch-path ~/Library/Caches/Pastlog-build PastlogSelfTest
-```
+## Your privacy
 
-History is stored locally in `~/Library/Application Support/Pastlog` and is never synced or uploaded.
+Your history stays on your Mac. Pastlog doesn't upload or share anything.
 
-> SwiftUI's `@State` is now a macro whose plugin ships only with Xcode, so the views use `@Local` (`LocalState.swift`) instead.
+## Help and feedback
 
-## Contributing
+Found a problem or have an idea? [Open an issue](https://github.com/sviera91/pastlog/issues).
 
-`main` is protected. Open a pull request. Every PR needs one approving review from a code owner (see `.github/CODEOWNERS`). Changes are listed in [CHANGELOG.md](CHANGELOG.md).
+Developers: see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
-[MIT](LICENSE).
-
-## Credits
-
-The fonts are VT323 and Space Mono, both under the SIL Open Font License (see `Resources/Fonts/OFL-*.txt`). The style was inspired by sviera91.github.io. The app icon artwork is `Resources/Icon/AppIcon-art.png`; `build.sh` clips it to the macOS icon shape.
+Free and open source under the [MIT License](LICENSE).
