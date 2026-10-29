@@ -9,6 +9,7 @@ You need the Xcode Command Line Tools. You don't need the full Xcode app.
 ./scripts/build.sh --install  # also installs it to /Applications and launches it
 ./scripts/build.sh --snapshots # renders every theme to dist/snapshots/
 swift run --scratch-path ~/Library/Caches/Pastlog-build PastlogSelfTest
+python3 scripts/readme-images.py # rebuilds the README images in docs/ (needs Pillow and --snapshots first)
 ```
 
 `build.sh` signs the app with the code-signing identity named in `PASTLOG_SIGN_IDENTITY`. If that isn't set, it looks for an identity called `Pastlog Local Signing`. If it finds neither, it signs ad hoc. An ad-hoc build loses its Accessibility permission every time you rebuild it.

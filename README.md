@@ -1,8 +1,12 @@
-# Pastlog
+<p align="center"><img src="docs/banner.png" alt="Pastlog: everything you copy, searchable" width="100%"></p>
+
+<p align="center"><a href="https://github.com/sviera91/pastlog/releases/latest"><b>Download Pastlog for Mac</b></a></p>
 
 Pastlog remembers everything you copy on your Mac, so you can find it and paste it again later.
 
 Press **⌃⌘V** (Control + Command + V) to open your history, type to search, and press **Return** to paste.
+
+<p align="center"><img src="docs/screenshot.png" alt="Pastlog in light and dark mode" width="100%"></p>
 
 ## Download and install
 
@@ -29,6 +33,8 @@ If you skip this step, Pastlog still copies the clip, and you press **⌘V** to 
 - Press **⌘1** through **⌘9** to paste one of your most recent clips.
 - Choose from 11 color themes.
 - Keep passwords and apps you choose out of your history.
+
+<p align="center"><img src="docs/themes.png" alt="Pastlog's 11 color themes" width="100%"></p>
 
 Find all options by clicking the Pastlog icon in the menu bar and choosing **Preferences**.
 
