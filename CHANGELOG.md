@@ -12,6 +12,6 @@ All notable changes to Pastlog are documented here. This project uses [Semantic 
 - Quick paste with `⌘1` to `⌘9` and `⌘0`, plus pinning, editing, deleting, and clip info.
 - Global shortcuts you can change: open Pastlog (`⌃⌘V`) and a quick menu at the cursor (`⌃⌥V`).
 - Excludes apps you choose and skips concealed or transient clips from password managers.
-- 11 themes plus Match System, including City Pop · sviera91.
+- 11 themes plus Match System.
 - Optional Dock icon. Duplicate clips move to the top instead of being saved twice.
 - History is stored locally in `~/Library/Application Support/Pastlog`.
