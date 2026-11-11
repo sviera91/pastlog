@@ -105,6 +105,7 @@ jobs:
             echo
             echo "Requires macOS 14 or later. Works on Apple silicon and Intel Macs."
             if [ -n "$CHANGES" ]; then echo; echo "## What's new"; echo "$CHANGES"; fi
+            echo; echo "## SHA-256 checksums"; echo '```'; (cd dist && shasum -a 256 Pastlog.dmg Pastlog.zip); echo '```'
           } > "$RUNNER_TEMP/notes.md"
           gh release create "$GITHUB_REF_NAME" dist/Pastlog.dmg dist/Pastlog.zip \
             --draft --title "Pastlog $VERSION" --notes-file "$RUNNER_TEMP/notes.md"

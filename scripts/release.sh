@@ -77,13 +77,19 @@ ditto -c -k --keepParent "$APP" "$WORK/Pastlog.zip"
 notarize "$WORK/Pastlog.zip"
 xcrun stapler staple "$APP"
 
+# Ship clean files: drop extended attributes such as com.apple.provenance, which only describe
+# the build machine. The signature and the stapled ticket live inside the bundle, not in them.
+xattr -cr "$APP"
+codesign --verify --strict "$APP"
+
 rm -f "$ZIP" "$DMG"
-ditto -c -k --sequesterRsrc --keepParent "$APP" "$ZIP"
+ditto -c -k --norsrc --noextattr --noqtn --keepParent "$APP" "$ZIP"
 
 # --- Disk image -------------------------------------------------------------------------------
 echo "▸ Creating disk image"
 mkdir "$WORK/dmg"
-ditto "$APP" "$WORK/dmg/Pastlog.app"
+ditto --norsrc --noextattr --noqtn "$APP" "$WORK/dmg/Pastlog.app"
+xattr -cr "$WORK/dmg/Pastlog.app"
 ln -s /Applications "$WORK/dmg/Applications"
 hdiutil create -quiet -volname "Pastlog" -srcfolder "$WORK/dmg" -fs HFS+ -format UDZO -ov "$DMG"
 codesign --force --timestamp --sign "$PASTLOG_SIGN_IDENTITY" "$DMG"
