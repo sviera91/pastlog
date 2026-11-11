@@ -1,6 +1,6 @@
 <p align="center"><img src="docs/banner.png" alt="Pastlog: everything you copy, searchable" width="100%"></p>
 
-<p align="center"><a href="https://github.com/sviera91/pastlog/releases/latest"><b>Download Pastlog for Mac</b></a></p>
+<p align="center"><a href="https://github.com/sviera91/pastlog/releases/latest/download/Pastlog.dmg"><b>Download Pastlog for Mac</b></a> · <a href="https://sviera91.github.io/pastlog/">Website</a></p>
 
 Pastlog remembers everything you copy on your Mac, so you can find it and paste it again later.
 
@@ -10,12 +10,11 @@ Press **⌃⌘V** (Control + Command + V) to open your history, type to search, 
 
 ## Download and install
 
-1. Open the [latest release](https://github.com/sviera91/pastlog/releases/latest) and download the Pastlog `.zip` file.
-2. Double-click the zip file, then drag **Pastlog** into your **Applications** folder.
-3. Open Pastlog. macOS can't verify the app because this release isn't notarized by Apple. Click **Done**.
-4. Open **System Settings → Privacy & Security**, scroll down, and click **Open Anyway** next to Pastlog. You only have to do this once.
+1. [Download **Pastlog.dmg**](https://github.com/sviera91/pastlog/releases/latest/download/Pastlog.dmg).
+2. Open the downloaded file, then drag **Pastlog** into your **Applications** folder.
+3. Open Pastlog from your Applications folder. Pastlog is notarized by Apple, so it opens like any other Mac app.
 
-Pastlog needs a Mac with Apple silicon (M1 or newer) running macOS 14 or later.
+Pastlog needs macOS 14 or later. It works on Macs with Apple silicon and Intel processors.
 
 ## Let Pastlog paste for you
 
