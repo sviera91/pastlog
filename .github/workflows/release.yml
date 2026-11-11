@@ -1,0 +1,91 @@
+# Builds, signs, notarizes and staples Pastlog, then drafts a GitHub release with the files.
+# Runs when you push a version tag:  git tag v1.1.0 && git push origin v1.1.0
+#
+# Repository secrets it needs (Settings → Secrets and variables → Actions):
+#   DEVELOPER_ID_P12           base64 of your "Developer ID Application" certificate exported as .p12
+#   DEVELOPER_ID_P12_PASSWORD  the password you chose when exporting the .p12
+#   NOTARY_API_KEY             base64 of the App Store Connect API key file (AuthKey_XXXXXXXXXX.p8)
+#   NOTARY_API_KEY_ID          the key ID shown next to the key in App Store Connect
+#   NOTARY_API_ISSUER          the issuer ID shown above the key list in App Store Connect
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: macos-15
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read the version from the tag
+        run: echo "VERSION=${GITHUB_REF_NAME#v}" >> "$GITHUB_ENV"
+
+      - name: Run self-tests
+        run: swift run PastlogSelfTest
+
+      - name: Install the signing certificate
+        env:
+          P12: ${{ secrets.DEVELOPER_ID_P12 }}
+          P12_PASSWORD: ${{ secrets.DEVELOPER_ID_P12_PASSWORD }}
+        run: |
+          KEYCHAIN="$RUNNER_TEMP/release.keychain-db"
+          KEYCHAIN_PASSWORD="$(uuidgen)"
+          echo "$P12" | base64 --decode > "$RUNNER_TEMP/cert.p12"
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN"
+          security import "$RUNNER_TEMP/cert.p12" -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN"
+          security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN" >/dev/null
+          security list-keychains -d user -s "$KEYCHAIN" "$HOME/Library/Keychains/login.keychain-db"
+          rm "$RUNNER_TEMP/cert.p12"
+
+      - name: Install the notary API key
+        env:
+          NOTARY_API_KEY: ${{ secrets.NOTARY_API_KEY }}
+        run: |
+          echo "$NOTARY_API_KEY" | base64 --decode > "$RUNNER_TEMP/AuthKey.p8"
+          echo "APPLE_API_KEY_PATH=$RUNNER_TEMP/AuthKey.p8" >> "$GITHUB_ENV"
+
+      - name: Build, sign and notarize
+        env:
+          APPLE_API_KEY_ID: ${{ secrets.NOTARY_API_KEY_ID }}
+          APPLE_API_ISSUER: ${{ secrets.NOTARY_API_ISSUER }}
+          PASTLOG_VERSION: ${{ env.VERSION }}
+          PASTLOG_BUILD: ${{ github.run_number }}
+        run: ./scripts/release.sh
+
+      - name: Draft the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Use this version's section of CHANGELOG.md as the release notes.
+          CHANGES="$(awk -v v="$VERSION" '
+            $0 ~ "^## \\[" v "\\]" { found = 1; next }
+            found && /^## \[/ { exit }
+            found { print }' CHANGELOG.md)"
+          {
+            echo "Pastlog remembers everything you copy so you can search for it and paste it again."
+            echo
+            echo "**Install:** Download **Pastlog.dmg**, open it, and drag Pastlog into Applications. Pastlog is notarized by Apple, so it opens like any other Mac app."
+            echo
+            echo "Requires macOS 14 or later. Works on Apple silicon and Intel Macs."
+            if [ -n "$CHANGES" ]; then echo; echo "## What's new"; echo "$CHANGES"; fi
+          } > "$RUNNER_TEMP/notes.md"
+          gh release create "$GITHUB_REF_NAME" dist/Pastlog.dmg dist/Pastlog.zip \
+            --draft --title "Pastlog $VERSION" --notes-file "$RUNNER_TEMP/notes.md"
+
+      - name: Remove the signing keychain and API key
+        if: always()
+        run: |
+          security delete-keychain "$RUNNER_TEMP/release.keychain-db" 2>/dev/null || true
+          rm -f "$RUNNER_TEMP/AuthKey.p8"
