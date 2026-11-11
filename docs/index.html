@@ -489,7 +489,7 @@ code { font: 0.88em var(--mono); background: rgba(0, 0, 0, 0.3); padding: 2px 6p
   // Let visitors on phones, tablets and PCs know Pastlog is a Mac app.
   var ua = navigator.userAgent;
   var touchMac = /Macintosh/.test(ua) && navigator.maxTouchPoints > 1; // iPadOS reports itself as a Mac
-  if (!/Macintosh|Mac OS X/.test(ua) || touchMac) document.documentElement.classList.add('is-not-mac');
+  if (!/Macintosh/.test(ua) || touchMac) document.documentElement.classList.add('is-not-mac');
 
   // After a download starts, show what to do next.
   var after = document.querySelector('.after');
