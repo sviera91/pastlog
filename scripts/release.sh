@@ -70,7 +70,7 @@ notarize() {
 # --- Build and sign ---------------------------------------------------------------------------
 "$ROOT/scripts/build.sh" --universal
 codesign --verify --strict --verbose=2 "$APP"
-codesign --display --verbose=2 "$APP" 2>&1 | grep -q "flags=.*runtime" || die "The hardened runtime isn't enabled."
+[[ "$(codesign --display --verbose=2 "$APP" 2>&1)" == *"(runtime)"* ]] || die "The hardened runtime isn't enabled."
 
 # --- Notarize and staple the app --------------------------------------------------------------
 ditto -c -k --keepParent "$APP" "$WORK/Pastlog.zip"
