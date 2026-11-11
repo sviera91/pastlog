@@ -497,7 +497,7 @@ code { font: 0.88em var(--mono); background: rgba(0, 0, 0, 0.3); padding: 2px 6p
     a.addEventListener('click', function () {
       after.classList.add('show');
       if (a.closest('.site-header') || a.closest('.final')) {
-        setTimeout(function () { after.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 150);
+        setTimeout(function () { after.scrollIntoView({ behavior: 'auto', block: 'center' }); }, 150);
       }
     });
   });
