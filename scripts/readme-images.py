@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
-"""Render docs/banner.png, docs/screenshot.png and docs/themes.png.
+"""Render docs/banner.png, docs/screenshot.png and docs/themes.png for the README,
+and the website images in docs/assets/.
 Run ./scripts/build.sh --snapshots first. Requires Pillow."""
+import os
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 S, F = 'dist/snapshots/', 'Resources/Fonts/'
@@ -65,3 +67,26 @@ for i, n in enumerate(names):
     place(g, t, (int(gap + c * (tw + gap)), gap + r * (th + gap)), 12, 12, 120)
 g.convert('RGB').save('docs/themes.png', optimize=True)
 print("Wrote docs/banner.png, docs/screenshot.png, docs/themes.png")
+
+# Website: one retina screenshot per theme (shown at 460 × 600), icons, and a social share image
+A = 'docs/assets/'
+os.makedirs(A, exist_ok=True)
+for n in names:
+    rounded(Image.open(S + f'panel-{n}.png'), 28).save(A + f'panel-{n}.webp', quality=86, method=6)
+
+art = Image.open('Resources/Icon/AppIcon-art.png')
+for size, name in [(512, 'icon-512.png'), (180, 'apple-touch-icon.png'), (48, 'favicon-48.png')]:
+    rounded(art.resize((size, size), Image.LANCZOS), round(size * 0.225)).save(A + name, optimize=True)
+
+W, H = 1200, 630
+og = background(W, H)
+panel = rounded(Image.open(S + 'panel-dark.png').resize((460, 600), Image.LANCZOS), 18)
+place(og, panel, (700, 70), 18, 30, 150)
+place(og, rounded(art.resize((120, 120), Image.LANCZOS), 27), (80, 110), 27, 20, 140)
+d = ImageDraw.Draw(og)
+d.text((76, 250), "Pastlog", font=ImageFont.truetype(F + 'SpaceMono-Bold.ttf', 96), fill=(255, 255, 255))
+d.text((80, 385), "Everything you copy,", font=ImageFont.truetype(F + 'SpaceMono-Regular.ttf', 38), fill=(150, 235, 255))
+d.text((80, 435), "searchable.", font=ImageFont.truetype(F + 'SpaceMono-Regular.ttf', 38), fill=(150, 235, 255))
+d.text((80, 520), "Free clipboard history for Mac", font=ImageFont.truetype(F + 'SpaceMono-Regular.ttf', 26), fill=(205, 190, 255))
+og.convert('RGB').save(A + 'og.png', optimize=True)
+print(f"Wrote {len(names)} theme screenshots, icons and og.png to {A}")

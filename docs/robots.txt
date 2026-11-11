@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sviera91.github.io/pastlog/sitemap.xml
