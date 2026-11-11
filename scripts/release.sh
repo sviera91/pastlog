@@ -77,8 +77,9 @@ ditto -c -k --keepParent "$APP" "$WORK/Pastlog.zip"
 notarize "$WORK/Pastlog.zip"
 xcrun stapler staple "$APP"
 
-# Ship clean files: drop extended attributes such as com.apple.provenance, which only describe
-# the build machine. The signature and the stapled ticket live inside the bundle, not in them.
+# Ship clean files: drop extended attributes, which only describe the build machine. The signature
+# and the stapled ticket live inside the bundle, not in them. (macOS won't let anything remove
+# com.apple.provenance, an opaque local ID, so the disk image still carries that one.)
 xattr -cr "$APP"
 codesign --verify --strict "$APP"
 
