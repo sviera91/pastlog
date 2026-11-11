@@ -2,6 +2,14 @@
 
 All notable changes to Pastlog are documented here. This project uses [Semantic Versioning](https://semver.org).
 
+## [1.1.0] - Unreleased
+
+### Added
+- Pastlog is signed with a Developer ID and notarized by Apple, so it opens without a security warning.
+- Runs on Intel Macs as well as Apple silicon.
+- Releases come as a disk image, `Pastlog.dmg`, as well as a zip.
+- A website at [sviera91.github.io/pastlog](https://sviera91.github.io/pastlog/).
+
 ## [1.0.0] - 2026-10-29
 
 ### Added
