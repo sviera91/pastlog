@@ -17,6 +17,7 @@
 #   APPLE_API_ISSUER    the issuer ID
 #
 # PASTLOG_VERSION (for example 1.1.0) sets the version. It defaults to the one in scripts/Info.plist.
+# PASTLOG_BUILD sets the build number. It defaults to the number of commits, so it always goes up.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 APP="$ROOT/dist/Pastlog.app"
@@ -45,7 +46,8 @@ else
 fi
 
 export PASTLOG_VERSION="${PASTLOG_VERSION:-$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' scripts/Info.plist)}"
-echo "▸ Releasing Pastlog $PASTLOG_VERSION, signed by \"$PASTLOG_SIGN_IDENTITY\""
+export PASTLOG_BUILD="${PASTLOG_BUILD:-$(git rev-list --count HEAD)}"
+echo "▸ Releasing Pastlog $PASTLOG_VERSION ($PASTLOG_BUILD), signed by \"$PASTLOG_SIGN_IDENTITY\""
 
 WORK="$(mktemp -d)"
 trap 'rm -rf "$WORK"' EXIT

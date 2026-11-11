@@ -21,11 +21,37 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # Skips the release, without failing, if the signing secrets aren't set up yet or if this
+  # version was already published by hand with scripts/release.sh.
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      build: ${{ steps.check.outputs.build }}
+    steps:
+      - id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HAS_SECRETS: ${{ secrets.DEVELOPER_ID_P12 != '' && secrets.NOTARY_API_KEY != '' }}
+        run: |
+          if [ "$HAS_SECRETS" != "true" ]; then
+            echo "::notice::Signing secrets aren't configured, so no release was built. See CONTRIBUTING.md."
+            echo "build=false" >> "$GITHUB_OUTPUT"
+          elif gh release view "$GITHUB_REF_NAME" -R "$GITHUB_REPOSITORY" --json assets --jq '.assets[].name' 2>/dev/null | grep -qx Pastlog.dmg; then
+            echo "::notice::$GITHUB_REF_NAME already has a Pastlog.dmg, so it wasn't rebuilt."
+            echo "build=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          fi
+
   release:
+    needs: check
+    if: needs.check.outputs.build == 'true'
     runs-on: macos-15
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # the build number is the commit count
 
       - name: Read the version from the tag
         run: echo "VERSION=${GITHUB_REF_NAME#v}" >> "$GITHUB_ENV"
@@ -61,7 +87,6 @@ jobs:
           APPLE_API_KEY_ID: ${{ secrets.NOTARY_API_KEY_ID }}
           APPLE_API_ISSUER: ${{ secrets.NOTARY_API_ISSUER }}
           PASTLOG_VERSION: ${{ env.VERSION }}
-          PASTLOG_BUILD: ${{ github.run_number }}
         run: ./scripts/release.sh
 
       - name: Draft the GitHub release

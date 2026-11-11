@@ -2,7 +2,7 @@
 
 All notable changes to Pastlog are documented here. This project uses [Semantic Versioning](https://semver.org).
 
-## [1.1.0] - Unreleased
+## [1.1.0] - 2026-11-11
 
 ### Added
 - Pastlog is signed with a Developer ID and notarized by Apple, so it opens without a security warning.
